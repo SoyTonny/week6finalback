@@ -5,7 +5,7 @@ const postMigrate = async () => {
 
     try {
         await sequelize.sync({ force: true })
-        console.log('DB reset 🤯');
+        console.log('Force final 😈😈😈');
         process.exit()
     } catch (error) {
         console.error(error);

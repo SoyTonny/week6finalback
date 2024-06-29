@@ -49,8 +49,9 @@ const login = catchError(async (req, res) => {
 });
 
 const logged = catchError(async (req, res) => {
-    const user = req.user
-    return res.json(user)
+    const userId = req.user
+    const result = await User.findByPk(userId)
+    return res.json(result)
 });
 
 module.exports = {

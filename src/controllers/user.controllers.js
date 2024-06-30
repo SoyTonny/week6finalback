@@ -49,7 +49,7 @@ const login = catchError(async (req, res) => {
 });
 
 const logged = catchError(async (req, res) => {
-    const userId = req.user
+    const userId = req.user.id
     const result = await User.findByPk(userId)
     return res.json(result)
 });

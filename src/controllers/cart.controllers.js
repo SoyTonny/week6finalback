@@ -38,6 +38,8 @@ const create = catchError(async (req, res) => {
 
 const getOne = catchError(async (req, res) => {
   const { id } = req.params;
+  const userId = req.user.id
+
   const result = await Cart.findByPk(id, {
     where: { userId },
     include: [

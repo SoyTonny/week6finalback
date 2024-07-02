@@ -3,6 +3,7 @@ const Category = require('./Category')
 const Product = require('./Product')
 const Cart = require('./Cart')
 const Purchase = require('./Purchase')
+const ProductImg = require('./ProductImg')
 
 ///Al modelo Product se le esta agregando la columna cartegoryId
 Product.belongsTo(Category)
@@ -25,3 +26,7 @@ User.hasMany(Purchase)
 //Al modelo Purchase se le esta agregando la columna productId
 Purchase.belongsTo(Product)
 Product.hasMany(Purchase)
+
+//Al modelo ProductImg se le esta agregando la columna de productId
+ProductImg.belongsTo(Product)
+Product.hasMany(ProductImg)

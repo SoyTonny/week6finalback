@@ -76,7 +76,6 @@ const remove = catchError(async (req, res) => {
 
 const update = catchError(async (req, res) => {
   const userId = req.user.id
-
   const { id } = req.params;
   const { quantity } = req.body;
 

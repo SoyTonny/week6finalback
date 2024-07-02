@@ -6,12 +6,10 @@ const Product = require('../models/Product')
 let TOKEN
 let product
 let cart
-// let cartId
+let cartId
 
 const BASE_URL_USERS = '/api/v1/users/login'
 const BASE_URL = '/api/v1/cart'
-
-
 
 
 beforeAll(async () => {
@@ -48,6 +46,7 @@ test("POST --> 'BASE_URL' should return status code 201, and res.body.quantity =
      .set('Authorization', `Bearer ${TOKEN}`)
      .send(cart)
 
+     cartId = res.body.id
 
     expect(res.statusCode).toBe(201)
     expect(res.body).toBeDefined()
@@ -61,4 +60,40 @@ test("GET ---> 'BASE_URL', should return status code 200 and res.body[0].quantit
         .set('Authorization', `Bearer ${TOKEN}`)
 
     expect(res.statusCode).toBe(200)
+    expect(res.body).toBeDefined()
+    expect(res.body[0].quantity).toBe(cart.quantity)
+});
+
+test("GET --> 'BASE_URL/:id', should return status code 200 and res.body.quantity === cart.quantity", async() => {
+    const res = await request(app)
+        .get(`${BASE_URL}/${cartId}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toBeDefined()
+    expect(res.body.quantity).toBe(cart.quantity)
+});
+
+test("PUT --> 'BASE_URL/:id', should return status code 200 and res.body.quantity === cartUpdate.quantity", async () => {
+
+    const cartUpdate = {
+        quantity: 2
+    }
+
+    const res = await request(app)
+        .put(`${BASE_URL}/${cartId}`)
+        .set('Authorization', `Bearer ${TOKEN}`)
+        .send(cartUpdate)
+    
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toBeDefined()
+    expect(res.body.quantity).toBe(cartUpdate.quantity)
+});
+
+test("DELETE --> 'BASE_URL/:id', should return status code 204", async () => {
+    const res = await request(app)
+    .delete(`${BASE_URL}/${cartId}`)
+    .set('Authorization', `Bearer ${TOKEN}`)
+
+    expect(res.statusCode).toBe(204)
 })

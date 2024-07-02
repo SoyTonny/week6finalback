@@ -4,7 +4,14 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 
 const getAll = catchError(async(req, res) => {
-    const results = await User.findAll();
+    const results = await User.findAll({
+        attributes: {
+            exclude: [
+                'createdAt',
+                'updatedAt'
+            ]
+        }
+    });
     return res.json(results);
 });
 

@@ -15,7 +15,7 @@ const Product = sequelize.define('product', {
         allowNull: false
     },
 
-    //categoryID
+    //categoryId
 });
 
 module.exports = Product;

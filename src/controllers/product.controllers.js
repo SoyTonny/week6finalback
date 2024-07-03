@@ -1,10 +1,11 @@
 const catchError = require('../utils/catchError');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const ProductImg = require('../models/ProductImg');
 
 const getAll = catchError(async (req, res) => {
     const results = await Product.findAll({
-        attributes: { exclude: ['createdAt', 'updatedAt'] }, 
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
         include: [{
             model: Category,
             attributes: {
@@ -13,7 +14,11 @@ const getAll = catchError(async (req, res) => {
                     'updatedAt'
                 ]
             }
-        }]
+        },
+        {
+            model: ProductImg
+        }
+        ]
     });
     return res.json(results);
 });
@@ -27,15 +32,20 @@ const getOne = catchError(async (req, res) => {
     const { id } = req.params;
     const result = await Product.findByPk(id, {
         attributes: { exclude: ['createdAt', 'updatedAt'] },
-        include: [{
-            model: Category,
-            attributes: {
-                exclude: [
-                    'createdAt',
-                    'updatedAt'
-                ]
+        include: [
+            {
+                model: Category,
+                attributes: {
+                    exclude: [
+                        'createdAt',
+                        'updatedAt'
+                    ]
+                }
+            },
+            {
+                model: ProductImg
             }
-        }]
+        ]
     });
     if (!result) return res.sendStatus(404);
     return res.json(result);
@@ -58,10 +68,22 @@ const update = catchError(async (req, res) => {
     return res.json(result[1][0]);
 });
 
+const setImages = catchError(async (req, res) => {
+    const { id } = req.params
+    const product = await Product.findByPk(id)
+    if (!product) return res.sendStatus(404)
+
+    await product.setProductImgs(req.body)
+    const images = await product.getProductImgs()
+
+    return res.status(200).json(images)
+});
+
 module.exports = {
     getAll,
     create,
     getOne,
     remove,
-    update
+    update,
+    setImages
 }

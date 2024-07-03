@@ -9,10 +9,6 @@ const getAll = catchError(async (req, res) => {
 });
 
 const create = catchError(async (req, res) => {
-  //Las columnas del modelo:
-  //FILENAME 💪
-  //URL
-  //productId -> vamos hacer un endpoint 👌
   const { filename } = req.file
   // console.log(filename);
   // console.log(req.protocol); //http
@@ -22,10 +18,10 @@ const create = catchError(async (req, res) => {
   if (imageDB) return res.sendStatus(404)
 
   const url = `${req.protocol}://${req.headers.host}/uploads/${filename}`
-  // console.log(url);
+
   const result = await ProductImg.create({ filename, url });
   return res.status(201).json(result);
-  // return res.sendStatus(200)
+
 });
 
 
@@ -36,10 +32,6 @@ const remove = catchError(async (req, res) => {
   if (!result) return res.sendStatus(404)
 
   console.log(__dirname);
-  // ..
-  //public
-  //uploads
-  //archivo
 
   const imageFilePath = path.join(__dirname, '..', 'public', 'uploads', result.filename)
 
